@@ -5,6 +5,8 @@ const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
+const session = require('./models/session');
+
 
 const app = express();
 
@@ -78,7 +80,29 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
+//app.use(Auth.checkLoginStatus);
 
+//Auth.createSession();
+
+app.get('/login', 
+(req, res) => {
+  res.render('login');
+});
+
+app.get('/signup', 
+(req, res) => {
+  res.render('signup');
+});
+
+app.post('/login',
+(req, res, next) => {
+  res.send('Placeholder login attempt message!');
+});
+
+app.post('/signup',
+(req, res, next) => {
+  res.send('Placeholder sign-up attempt message!');
+});
 
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail
