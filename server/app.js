@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
 const session = require('./models/session');
+const user = require('./models/user');
 
 
 const app = express();
@@ -80,7 +81,7 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
-//app.use(Auth.checkLoginStatus);
+//app.use(Auth.    );
 
 //Auth.createSession();
 
@@ -96,12 +97,17 @@ app.get('/signup',
 
 app.post('/login',
 (req, res, next) => {
+
   res.send('Placeholder login attempt message!');
 });
 
 app.post('/signup',
 (req, res, next) => {
-  res.send('Placeholder sign-up attempt message!');
+  // grab username and password
+  //console.log(req.body);
+  // create user
+  user.create(req.body);
+  res.render('login');
 });
 
 /************************************************************/
