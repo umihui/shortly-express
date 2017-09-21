@@ -122,8 +122,22 @@ app.get('/signup',
 
 app.post('/login',
 (req, res, next) => {
-
-  res.send('Placeholder login attempt message!');
+  models.Users.get({username: req.body.username})
+    // .catch(function(err){
+    //   res.redirect('/signup');
+    // })
+    .then(function(result) {
+      console.log('LOGIN', result);
+      if (result === undefined) {
+        res.redirect('/login');
+      } else if (user.compare(req.body.password, result.password, result.salt)) {
+        console.log('PASSWORD CORRECT');
+        res.redirect('/');
+      } else {
+        console.log('PASSWORD WRONG');
+        res.redirect('/login');
+      }
+    });  
 });
 
 app.post('/signup',
