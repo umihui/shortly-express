@@ -19,6 +19,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
+app.use(
+  function (req, res, next) {
+    console.log(req.headers.cookie);
+    if (!!req.headers.cookie) {
+      console.log('HAS COOKIE');
+      next();
+    } else {
+      console.log('NO COOKIE');
+      var newSession = session.create()
+        .then(function(results) { 
+          console.log(results);
+          session.get({id: 1})
+            .then(function(results) { 
+              console.log('GET APP', results);
+              res.cookie('shortly cookie', results.hash, { maxAge: 100000}); 
+              
+            })
+            .then(function() {
+              next();
+            }); 
+        });  
+    }
+    
+  } 
+);
 
 app.get('/', 
 (req, res) => {
@@ -81,11 +106,11 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
-//app.use(Auth.    );
+
 
 //Auth.createSession();
 
-app.get('/login', 
+app.get('/login',
 (req, res) => {
   res.render('login');
 });
@@ -103,11 +128,14 @@ app.post('/login',
 
 app.post('/signup',
 (req, res, next) => {
-  // grab username and password
-  //console.log(req.body);
-  // create user
-  user.create(req.body);
-  res.render('login');
+  user.create(req.body)
+    .catch(function(err) {
+      res.redirect('/signup');
+    })
+    .then(function(results) {
+      res.redirect('/');
+    });
+  
 });
 
 /************************************************************/

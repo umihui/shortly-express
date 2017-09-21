@@ -2,7 +2,7 @@ const db = require('../db');
 const _ = require('lodash');
 
 const executeQuery = (query, values) => {
-  return db.queryAsync(query, values).spread(results => results);
+  return db.queryAsync(query, values).spread(results => { console.log('QUERY', results); return results; });
 };
 
 const parseData = options => {
@@ -53,7 +53,10 @@ class Model {
   get(options) {
     let parsedOptions = parseData(options);
     let queryString = `SELECT * FROM ${this.tablename} WHERE ${parsedOptions.string.join(' AND ')} LIMIT 1`;
-    return executeQuery(queryString, parsedOptions.values).then(results => results[0]);
+    return executeQuery(queryString, parsedOptions.values).then(results => {
+      console.log('GET MODEL',results); 
+      return results[0];
+    });
   }
 
   /**

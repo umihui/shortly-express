@@ -3,8 +3,13 @@ const session = require('../models/session');
 const Promise = require('bluebird');
 
 module.exports.createSession = (req, res, next) => {
-  // console.log(session.isLoggedIn());
-  // next();
+  // access parsed cookie on req
+  // look up session user data
+  // 
+
+
+
+  // if session not valid...
 };
 
 /************************************************************/
@@ -16,5 +21,11 @@ module.exports.checkLoginStatus = (req, res, next) => {
   if (false) {
   //res.send();
   }
+  next();
+};
+
+module.exports.checkCookie = (req, res, next) => {
+
+  console.log('COOKIE',!!req.cookie);
   next();
 };
