@@ -1,10 +1,11 @@
 const parseCookies = (req, res, next) => {
-
-  // on request, check for cookie
-  // if  no, create new cookie
-  // if yes, parse the cookie
-
-  // request.cookie = that object
+  var result = {};
+  var cookies = req.headers.cookies || '';
+  cookies.split('; ').forEach(function(c) {
+    var single = c.split('=');
+    result[single[0]] = single[1];
+  });
+  return result;
 
 };
 
