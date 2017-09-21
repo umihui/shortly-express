@@ -19,31 +19,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
-app.use(
-  function (req, res, next) {
-    console.log(req.headers.cookie);
-    if (!!req.headers.cookie) {
-      console.log('HAS COOKIE');
-      next();
-    } else {
-      console.log('NO COOKIE');
-      var newSession = session.create()
-        .then(function(results) { 
-          console.log(results);
-          session.get({id: 1})
-            .then(function(results) { 
-              console.log('GET APP', results);
-              res.cookie('shortly cookie', results.hash, { maxAge: 100000}); 
+// app.use(
+//   function (req, res, next) {
+//     console.log(req.headers.cookie);
+//     if (!!req.headers.cookie) {
+//       console.log('HAS COOKIE');
+//       next();
+//     } else {
+//       console.log('NO COOKIE');
+//       var newSession = session.create()
+//         .then(function(results) { 
+//           console.log(results);
+//           session.get({id: 1})
+//             .then(function(results) { 
+//               console.log('GET APP', results);
+//               res.cookie('shortly cookie', results.hash, { maxAge: 100000}); 
               
-            })
-            .then(function() {
-              next();
-            }); 
-        });  
-    }
+//             })
+//             .then(function() {
+//               next();
+//             }); 
+//         });  
+//     }
     
-  } 
-);
+//   } 
+// );
 
 app.get('/', 
 (req, res) => {
