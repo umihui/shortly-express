@@ -17,6 +17,8 @@ app.use(partials());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
+//app.use(Auth.createSession);
+
 
 
 // app.use(
@@ -127,30 +129,31 @@ app.post('/login',
     //   res.redirect('/signup');
     // })
     .then(function(result) {
-      console.log('LOGIN', result);
+      //console.log('LOGIN', result);
       if (result === undefined) {
         res.redirect('/login');
       } else if (user.compare(req.body.password, result.password, result.salt)) {
-        console.log('PASSWORD CORRECT');
+        //console.log('PASSWORD CORRECT');
         res.redirect('/');
       } else {
-        console.log('PASSWORD WRONG');
+        //console.log('PASSWORD WRONG');
         res.redirect('/login');
       }
     });  
 });
 
 app.post('/signup',
-(req, res, next) => {
-  user.create(req.body)
-    .catch(function(err) {
-      res.redirect('/signup');
-    })
-    .then(function(results) {
-      res.redirect('/');
+  (req, res, next) => {
+    models.Users.get({username: req.body.username})
+    .then(function(result) {
+      if (result === undefined) {
+        user.create(req.body);
+        res.redirect('/');
+      } else {
+        return res.redirect('/signup');
+      }
     });
-  
-});
+  });
 
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail

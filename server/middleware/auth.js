@@ -7,29 +7,27 @@ module.exports.createSession = (req, res, next) => {
   // look up session user data
   console.log(req.headers.cookie);
   if (!!req.headers.cookie) {
-    console.log('HAS COOKIE');
+    //console.log('HAS COOKIE');
     next();
   } else {
-    console.log('NO COOKIE');
+    //console.log('NO COOKIE');
     var newSession = session;
-    console.log('NEWSES:', newSession)
+    //console.log('NEWSES:', newSession)
     newSession.create()
       .then(function(results) { 
         console.log(results);
         newSession.get({id: 1})
           .then(function(results) { 
-            
-            res.cookie('shortly cookie', results.hash, { maxAge: 100000}); 
-            req.session = newSession;
-            console.log('GET APP', results);
-
+            res.cookie('shortlyid', results.hash, { maxAge: 100000}); 
+            req.session = results;
+            //console.log('GET APP', results.hash);
+            next();   
           });
-          // .then(function() {
-          //   next();
-          // }); 
+      })
+      .catch(function(err) {
+        console.log('Error at line 32');
       });  
   }
-  next();
   // if session not valid...
 };
 
@@ -38,15 +36,15 @@ module.exports.createSession = (req, res, next) => {
 /************************************************************/
 
 module.exports.checkLoginStatus = (req, res, next) => {
-  console.log('auth placeholder');
-  if (false) {
-  //res.send();
-  }
+  // console.log('auth placeholder');
+  // if (false) {
+  // //res.send();
+  // }
   next();
 };
 
 module.exports.checkCookie = (req, res, next) => {
 
-  console.log('COOKIE',!!req.cookie);
+  //console.log('COOKIE',!!req.cookie);
   next();
 };
