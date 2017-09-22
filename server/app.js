@@ -7,6 +7,7 @@ const Auth = require('./middleware/auth');
 const models = require('./models');
 const session = require('./models/session');
 const user = require('./models/user');
+const cookieParser = require('./middleware/cookieParser');
 
 
 const app = express();
@@ -17,7 +18,8 @@ app.use(partials());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
-//app.use(Auth.createSession);
+app.use(Auth.checkCookie);
+//app.use(cookieParser);
 
 
 
@@ -132,8 +134,14 @@ app.post('/login',
       //console.log('LOGIN', result);
       if (result === undefined) {
         res.redirect('/login');
-      } else if (user.compare(req.body.password, result.password, result.salt)) {
-        //console.log('PASSWORD CORRECT');
+      } else if (user.compare(req.body.password, 
+        result.password, result.salt)) {
+        //get userID
+        //get cookie
+        session.get({hash: req.cookies.shortlyid})
+        .then(function(result) {
+           
+        })
         res.redirect('/');
       } else {
         //console.log('PASSWORD WRONG');
